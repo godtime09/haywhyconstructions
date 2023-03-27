@@ -1,10 +1,10 @@
 <?php
 // Replace with your own values
-$host = '123.456.789.012'; // Use your Public IP Address here
-$username = 'myusername';
-$password = 'mypassword';
-$dbname = 'mydatabase';
-$charset = 'utf8mb4';
+$host = '34.173.35.180'; // Use your Public IP Address here
+$username = 'godtime';
+$password = 'Godtimebenson';
+$dbname = 'post_db';
+$charset = 'utf8';
 
 // Create connection
 try {
