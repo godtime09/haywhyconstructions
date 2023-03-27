@@ -1,20 +1,18 @@
 <?php
-// Database configuration
-$host = 'primal-monument-361913:us-central1:haywhy';
-$dbname = 'post_db';
-$username = 'godtins';
-$password = 'Godtimebenson09';
+// Replace with your own values
+$host = '123.456.789.012'; // Use your Public IP Address here
+$username = 'myusername';
+$password = 'mypassword';
+$dbname = 'mydatabase';
+$charset = 'utf8mb4';
 
-// PDO options
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
-
-// Create a PDO instance
+// Create connection
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, $options);
+  $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+  $pdo = new PDO($dsn, $username, $password);
+  // Set error mode to exceptions
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    throw new PDOException($e->getMessage(), (int)$e->getCode());
+  die("Connection failed: " . $e->getMessage());
 }
+?>
