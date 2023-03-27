@@ -1,35 +1,33 @@
 <?php
+require_once('db.php');
 
-// Connect to the database
-$host = 'primal-monument-361913:us-central1:haywhy';
-$dbname = 'post_db';
-$username = 'godtins';
-$password = 'Godtimebenson09';
-$dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
-$options = [
-	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-	PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-	PDO::ATTR_EMULATE_PREPARES => false,
-];
-$pdo = new PDO($dsn, $username, $password, $options);
+if(isset($_POST['submit'])) {
+  $title = $_POST['title'];
+  $content = $_POST['content'];
+  $image = $_FILES['image']['name'];
 
-// Process the form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	// Get the form data
-	$title = $_POST['title'];
-	$content = $_POST['content'];
-	$image = $_FILES['image']['name'];
-	$tmp_image = $_FILES['image']['tmp_name'];
+  // File upload path
+  $targetDir = "uploads/";
+  $targetFilePath = $targetDir . basename($image);
+  $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
 
-	// Save the image file to a uploads folder
-	$uploads_dir = 'uploads/';
-	move_uploaded_file($tmp_image, $uploads_dir . $image);
-
-	// Insert the post data into the database
-	$stmt = $pdo->prepare('INSERT INTO posts (title, content, image) VALUES (?, ?, ?)');
-	$stmt->execute([$title, $content, $image]);
-
-	// Redirect back to the home page
-	header('Location: view-post.php');
-	exit();
+  // Allow certain file formats
+  $allowTypes = array('jpg','png','jpeg','gif');
+  if(in_array($fileType, $allowTypes)){
+    // Upload file to server
+    if(move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)){
+      // Insert into database
+      $stmt = $pdo->prepare("INSERT INTO posts (title, content, image) VALUES (:title, :content, :image)");
+      $stmt->bindParam(":title", $title);
+      $stmt->bindParam(":content", $content);
+      $stmt->bindParam(":image", $image);
+      $stmt->execute();
+      header('Location: view-post.php');
+    }else{
+      $statusMsg = "Sorry, there was an error uploading your file.";
+    }
+  }else{
+    $statusMsg = 'Sorry, only JPG, JPEG, PNG, & GIF files are allowed to upload.';
+  }
+}
 ?>
