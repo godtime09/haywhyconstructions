@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Post Submitted</title>
+</head>
+<body>
+  <h1>Success</h1>
 <?php
 require_once('db.php');
 
@@ -31,3 +38,5 @@ if(isset($_POST['submit'])) {
   }
 }
 ?>
+</body>
+</html>
